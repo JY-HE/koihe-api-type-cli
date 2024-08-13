@@ -1,0 +1,20 @@
+# 顶级配置适用于整个项目
+root = true
+
+# 针对所有文件
+[*]
+charset = utf-8                 # 文件编码为 UTF-8
+indent_style = space            # 使用空格进行缩进
+indent_size = 4                 # 缩进的空格数为 4
+end_of_line = lf                # 行尾符为 LF（Unix 风格）
+insert_final_newline = true     # 在文件末尾插入新行
+trim_trailing_whitespace = true # 删除行尾的空白字符
+max_line_length = 100           # 每行最长字符
+
+# 针对特定文件类型，例如 Markdown 文件
+[*.md]
+indent_size = 4                 # Markdown 文件使用 4 个空格缩进
+
+# 针对 Makefile，使用 Tab 缩进
+[Makefile]
+indent_style = tab

@@ -1,0 +1,55 @@
+{
+    "name": "@koihe/api-type-cli",
+    "version": "1.0.0",
+    "description": "用于解析Swagger文档，并自动生成API接口类型定义的工具库。",
+    "main": "dist/index.js",
+    "private": false,
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/JY-HE/koihe-api-type-cli.git"
+    },
+    "homepage": "https://github.com/JY-HE/koihe-api-type-cli",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "files": [
+        "packages/cli",
+        "packages/core"
+    ],
+    "keywords": [
+        "@koihe",
+        "@koihe/api-type-cli",
+        "api-type-cli",
+        "api",
+        "type-cli",
+        "swagger"
+    ],
+    "author": "koihe",
+    "license": "MIT",
+    "dependencies": {
+        "axios": "^1.6.7",
+        "cac": "^6.7.14",
+        "fs-extra": "^11.2.0",
+        "inquirer": "^9.2.15",
+        "log-symbols": "^6.0.0",
+        "ora": "^8.0.1",
+        "path": "^0.12.7",
+        "picocolors": "^1.0.0",
+        "progress-estimator": "^0.3.1",
+        "simple-git": "^3.22.0"
+    },
+    "devDependencies": {
+        "@types/fs-extra": "^5.0.4",
+        "@types/node": "^20.2.1",
+        "@typescript-eslint/eslint-plugin": "^5.54.0",
+        "@typescript-eslint/parser": "^5.0.0",
+        "eslint": "^7.32.0",
+        "openapi-types": "^7.0.1",
+        "tsc-alias": "^1.8.6",
+        "typescript": "^4.5.5"
+    }
+}
