@@ -1,5 +1,5 @@
 module.exports = {
-    ignorePatterns: [".eslintrc.js"], // 忽略 .eslintrc.js 文件
+    ignorePatterns: [".eslintrc.js", "rollup.config.mjs", "bin/index.js"], // 忽略文件
     parser: "@typescript-eslint/parser",
     extends: [
         "eslint:recommended",
@@ -7,7 +7,7 @@ module.exports = {
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
     ],
     parserOptions: {
-        ecmaVersion: 2020,
+        ecmaVersion: 2022,
         sourceType: "module",
         project: "./tsconfig.json", // 这里指定 TypeScript 配置文件
     },

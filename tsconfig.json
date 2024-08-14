@@ -1,7 +1,8 @@
 {
     "compilerOptions": {
-        "target": "ES6",
-        "module": "commonjs",
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "node",
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
@@ -10,8 +11,9 @@
         "baseUrl": "./",
         "paths": {
             "@/*": ["packages/*"]
-        }
+        },
+        "resolveJsonModule": true
     },
-    "include": ["packages/**/*.ts", ".eslintrc.js"],
-    "exclude": ["node_modules", "dist"]
+    "include": ["packages/**/*.ts"],
+    "exclude": ["node_modules", "dist", "bin"]
 }
