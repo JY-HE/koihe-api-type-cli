@@ -4,6 +4,7 @@
     "description": "用于解析Swagger文档，并自动生成API接口类型定义的工具库。",
     "type": "module",
     "main": "dist/index.mjs",
+    "types": "dist/index.d.ts",
     "bin": {
         "apit": "bin/index.js"
     },

@@ -32,7 +32,7 @@ class Cli {
      */
     private async handleInit() {
         try {
-            await this.service.init();
+            await this.service.initConfigFile();
         } catch (error) {
             console.error("初始化配置文件失败:", error);
         }
@@ -46,7 +46,11 @@ class Cli {
     }
 
     public run() {
-        this.cli.parse();
+        try {
+            this.cli.parse();
+        } catch (error) {
+            console.error("命令行解析失败:", error);
+        }
     }
 }
 

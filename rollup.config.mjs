@@ -19,10 +19,10 @@ export default {
             preferBuiltins: true, // 优先使用内置模块
         }),
         commonjs(), 
-        json(),
         typescript({
             tsconfig: './tsconfig.json',
         }),
+        json(),
     ],
     external: ['path', 'events', 'stream'], // 将 Node.js 内置模块标记为外部依赖
 };
