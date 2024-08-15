@@ -1,19 +1,21 @@
 {
     "compilerOptions": {
-        "target": "esnext",
-        "module": "esnext",
-        "moduleResolution": "node",
-        "strict": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
-        "outDir": "./dist",
+        "target": "ESNext", // 目标 JavaScript 版本
+        "module": "ESNext", // 模块代码生成方式
+        "declaration": true, // 生成声明文件
+        "strict": true, // 启用所有严格类型检查选项
+        "esModuleInterop": true, // 允许与 CommonJS 模块进行互操作
+        "skipLibCheck": true, // 跳过对库文件的类型检查
+        "forceConsistentCasingInFileNames": true, // 强制在文件名中保持一致的大小写
+        "moduleResolution": "node", // 模块解析策略
+        "outDir": "dist", // 输出目录
+        "rootDir": "./", // 源代码根目录
         "baseUrl": "./",
         "paths": {
-            "@/*": ["packages/*"]
+            "@/*": ["src/*"]
         },
-        "resolveJsonModule": true
+        "resolveJsonModule": true // 启用 JSON 模块解析
     },
-    "include": ["packages/**/*.ts"],
+    "include": ["src/**/*.ts", ".eslintrc.js", "rollup.config.mjs", "bin/index.js"],
     "exclude": ["node_modules", "dist", "bin"]
 }
