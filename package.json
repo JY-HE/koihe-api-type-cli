@@ -25,6 +25,12 @@
         "build": "rollup --config",
         "publish": "npm publish"
     },
+    "exports": {
+        ".": {
+            "import": "./dist/index.mjs",
+            "types": "./dist/index.d.ts"
+        }
+    },
     "files": [
         "bin",
         "dist"
@@ -55,6 +61,7 @@
         "@rollup/plugin-commonjs": "^26.0.1",
         "@rollup/plugin-json": "^6.1.0",
         "@rollup/plugin-node-resolve": "^15.0.0",
+        "@rollup/plugin-replace": "^5.0.7",
         "@rollup/plugin-terser": "^0.4.4",
         "@rollup/plugin-typescript": "^11.1.6",
         "@types/fs-extra": "^5.0.4",

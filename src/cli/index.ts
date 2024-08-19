@@ -14,7 +14,6 @@ class Cli {
     }
 
     private registerCommands() {
-        this.cli.version(version);
 
         this.cli
             .command("init", "初始化配置")
@@ -22,7 +21,15 @@ class Cli {
 
         this.cli
             .command("")
-            .action(() => this.handleDefaultCommand());
+            .option('-v, --version', 'Display version number')
+            .action((cmd) => {
+                // 自定义展示版本信息，因为 cli.version() 不是想要的效果 
+                if (cmd.version || cmd.v) {
+                    console.log(`v${version}`);
+                } else {
+                    this.handleDefaultCommand()
+                }
+            });
 
         this.cli.help();
     }
@@ -34,15 +41,23 @@ class Cli {
         try {
             await this.service.initConfigFile();
         } catch (error) {
-            console.error("初始化配置文件失败:", error);
+            console.error("配置文件生成失败:", error);
         }
+        process.exit(1);
     }
 
     /**
      * @description 生成 API 接口类型定义文件
      */
-    private handleDefaultCommand() {
-        console.log("🚀 ~ index.ts:15 ~ cmd:", 1111111111);
+    private async handleDefaultCommand() {
+        try {
+            // 读取配置文件
+            const config = await this.service.getConfigFile();
+            console.log('🚀 ~ index.ts:47 ~ config:', config);
+        } catch (error) {
+            console.error(error);
+        }
+        process.exit(1);
     }
 
     public run() {
@@ -53,6 +68,5 @@ class Cli {
         }
     }
 }
-
 
 export default Cli
