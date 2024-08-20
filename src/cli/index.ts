@@ -41,7 +41,7 @@ class Cli {
         try {
             await this.service.initConfigFile();
         } catch (error) {
-            console.error("配置文件生成失败:", error);
+            console.error("handleInit has a error:", error);
         }
         process.exit(1);
     }
@@ -52,10 +52,11 @@ class Cli {
     private async handleDefaultCommand() {
         try {
             // 读取配置文件
-            const config = await this.service.getConfigFile();
-            console.log('🚀 ~ index.ts:47 ~ config:', config);
+            const configFileContent = await this.service.getConfigFile();
+            // 获取 swagger 文档数据
+            const res = await this.service.getSwaggerData(configFileContent);
         } catch (error) {
-            console.error(error);
+            console.error('handleDefaultCommand has a error:', error);
         }
         process.exit(1);
     }
@@ -64,7 +65,7 @@ class Cli {
         try {
             this.cli.parse();
         } catch (error) {
-            console.error("命令行解析失败:", error);
+            console.error("run has a error:", error);
         }
     }
 }
