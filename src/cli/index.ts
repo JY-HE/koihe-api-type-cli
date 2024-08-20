@@ -1,6 +1,6 @@
 import { cac } from "cac";
 import { version } from "../../package.json";
-import Service from "./service";
+import Service from "../core";
 
 class Cli {
     private cli: ReturnType<typeof cac>;
@@ -13,6 +13,9 @@ class Cli {
         this.registerCommands();
     }
 
+    /**
+     * @description 注册命令
+     */
     private registerCommands() {
 
         this.cli
@@ -61,6 +64,9 @@ class Cli {
         process.exit(1);
     }
 
+    /**
+     * @description 运行脚本
+     */
     public run() {
         try {
             this.cli.parse();

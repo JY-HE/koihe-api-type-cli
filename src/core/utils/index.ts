@@ -1,6 +1,5 @@
 import inquirer from 'inquirer';
 import { existsSync } from 'fs-extra';
-import { OverwritePromptResult } from '../types/prompt';
 import pc from 'picocolors';
 
 /**
@@ -12,7 +11,9 @@ export const isCreateFile = async (filePath: string): Promise<boolean> => {
     try {
         // 判断文件是否存在
         if (existsSync(filePath)) {
-            const { isOverwrite } = await inquirer.prompt<OverwritePromptResult>([
+            const { isOverwrite } = await inquirer.prompt<{
+                isOverwrite: boolean;
+            }>([
                 {
                     type: 'list',
                     name: 'isOverwrite',
