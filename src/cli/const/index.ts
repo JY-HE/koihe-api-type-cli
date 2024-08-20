@@ -11,7 +11,7 @@ export const CONFIG_FILE_CONTENT = `
   "outputPath": "src/api/index.ts", 
   "requiredRequestField": false,
   "requiredResponseField": true,
-  "documentServers": [{
+  "servers": [{
     "url": "http://接口文档地址.com",
     "type": "swagger",
     "name": "",
@@ -21,7 +21,8 @@ export const CONFIG_FILE_CONTENT = `
       "password": ""
     },
     "authToken": "",
-    "headers": {}
+    "headers": {},
+    "params": {}
   }]
 }
 `
