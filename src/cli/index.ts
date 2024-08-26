@@ -25,12 +25,18 @@ class Cli {
         this.cli
             .command("")
             .option('-v, --version', 'Display version number')
-            .action((cmd) => {
+            .action(async (cmd) => {
                 // 自定义展示版本信息，因为 cli.version() 不是想要的效果 
                 if (cmd.version || cmd.v) {
                     console.log(`v${version}`);
                 } else {
-                    this.handleDefaultCommand()
+                    try {
+                        await this.handleDefaultCommand();
+                        process.exit(0);
+                    } catch (error) {
+                        console.error('An error occurred:', error);
+                        process.exit(1);
+                    }
                 }
             });
 
@@ -43,10 +49,11 @@ class Cli {
     private async handleInit() {
         try {
             await this.service.initConfigFile();
+            process.exit(0);
         } catch (error) {
             console.error("handleInit has a error:", error);
+            process.exit(1);
         }
-        process.exit(1);
     }
 
     /**
@@ -63,9 +70,8 @@ class Cli {
                 await this.service.parseSwaggerData(res);
             }
         } catch (error) {
-            console.error('handleDefaultCommand has a error:', error);
+            throw error;
         }
-        process.exit(1);
     }
 
     /**
