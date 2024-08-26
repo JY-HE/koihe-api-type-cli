@@ -58,6 +58,10 @@ class Cli {
             const configFileContent = await this.service.getConfigFile();
             // 获取 swagger 文档数据
             const res = await this.service.getSwaggerData(configFileContent);
+            if (res.length) {
+                // 解析数据
+                await this.service.parseSwaggerData(res);
+            }
         } catch (error) {
             console.error('handleDefaultCommand has a error:', error);
         }

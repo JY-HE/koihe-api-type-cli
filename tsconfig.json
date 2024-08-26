@@ -14,7 +14,11 @@
         "paths": {
             "@/*": ["src/*"]
         },
-        "resolveJsonModule": true // 启用 JSON 模块解析
+        "resolveJsonModule": true, // 启用 JSON 模块解析
+        "sourceMap": true
+    },
+    "ts-node": {
+        "esm": true
     },
     "include": ["src/**/*.ts", ".eslintrc.js", "rollup.config.mjs", "bin/index.js"],
     "exclude": ["node_modules", "dist", "bin"]

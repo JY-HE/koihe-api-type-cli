@@ -1,6 +1,7 @@
 import type { AxiosHeaders } from 'axios';
 import { AxiosRequestConfig } from 'axios';
 import { Agent } from "https";
+import { OpenAPIV3 } from "openapi-types";
 
 /**
  * @description 配置文件中 Server 类型
@@ -41,5 +42,38 @@ export type Config = {
  */
 export type RequestConfig = AxiosRequestConfig & {
     httpsAgent: Agent;
+}
+
+/**
+ * @description swagger 文档数据类型
+ */
+export type SwaggerData = OpenAPIV3.Document & {
+    bizName: string;
+    version: string;
+}
+
+export type Properties = {
+    key: string,
+    type: string,
+    description: string,
+    required: boolean,
+    details?: Array<Properties | number | string> | null
+}
+
+/**
+ * @description 处理后的单个 schema 对象数据类型
+ */
+export type Schema = {
+    type: string,
+    description: string,
+    properties?: Array<Properties> | null
+    details?: Array<any> | null
+};
+
+/**
+ * @description 处理后的 schemas 对象数据类型
+ */
+export type ProcessedSchema = {
+    [key: string]: Schema
 }
 

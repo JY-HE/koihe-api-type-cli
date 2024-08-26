@@ -11,6 +11,7 @@ export default {
         {
             file: "dist/index.mjs",
             format: "esm",
+            sourcemap: true,
         },
     ],
     plugins: [
