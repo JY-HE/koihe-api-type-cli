@@ -52,6 +52,9 @@ export type SwaggerData = OpenAPIV3.Document & {
     version: string;
 }
 
+/**
+ * @description schema 对象的 properties 属性类型
+ */
 export type Properties = {
     key: string,
     type: string,
@@ -73,7 +76,6 @@ export type Schema = {
 /**
  * @description 处理后的 schemas 对象数据类型
  */
-export type ProcessedSchema = {
+export type ProcessedSchemas = {
     [key: string]: Schema
 }
-
