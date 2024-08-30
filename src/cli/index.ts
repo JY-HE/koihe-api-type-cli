@@ -17,16 +17,13 @@ class Cli {
      * @description 注册命令
      */
     private registerCommands() {
-
-        this.cli
-            .command("init", "初始化配置")
-            .action(() => this.handleInit());
+        this.cli.command("init", "初始化配置").action(() => this.handleInit());
 
         this.cli
             .command("")
-            .option('-v, --version', 'Display version number')
+            .option("-v, --version", "Display version number")
             .action(async (cmd) => {
-                // 自定义展示版本信息，因为 cli.version() 不是想要的效果 
+                // 自定义展示版本信息，因为 cli.version() 不是想要的效果
                 if (cmd.version || cmd.v) {
                     console.log(`v${version}`);
                 } else {
@@ -34,7 +31,7 @@ class Cli {
                         await this.handleDefaultCommand();
                         process.exit(0);
                     } catch (error) {
-                        console.error('An error occurred:', error);
+                        console.error("An error occurred:", error);
                         process.exit(1);
                     }
                 }
@@ -86,4 +83,4 @@ class Cli {
     }
 }
 
-export default Cli
+export default Cli;

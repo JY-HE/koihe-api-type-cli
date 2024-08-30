@@ -5,7 +5,7 @@ import { Config, RequestConfig, Server, SwaggerData } from "../types/config";
 import { OpenAPIV3 } from "openapi-types";
 
 /**
- * @description 负责处理多个 Swagger 文档数据的获取与解析
+ * @description 处理 swagger 文档数据的获取
  */
 class SwaggerService {
     /**
@@ -19,8 +19,8 @@ class SwaggerService {
         const requests = config.servers.map((server: Server) => {
             const requestConfig: RequestConfig = this.buildRequestConfig(server, httpsAgent);
             return axios<OpenAPIV3.Document>(requestConfig).then(
-                response => this.processResponse(server, response),
-                error => this.handleRequestError(error, server.url)
+                (response) => this.processResponse(server, response),
+                (error) => this.handleRequestError(error, server.url)
             );
         });
 
@@ -31,8 +31,11 @@ class SwaggerService {
         LoggerService.succeed("获取 Swagger 文档数据完成");
 
         return results
-            .filter((result): result is PromiseFulfilledResult<SwaggerData | null> => result.status === "fulfilled")
-            .map(result => result.value)
+            .filter(
+                (result): result is PromiseFulfilledResult<SwaggerData | null> =>
+                    result.status === "fulfilled"
+            )
+            .map((result) => result.value)
             .filter((data): data is SwaggerData => data !== null);
     }
 
@@ -69,8 +72,11 @@ class SwaggerService {
         const apiVersion = version || this.extractVersion(info.version);
 
         return {
-            bizName,
-            version: apiVersion,
+            serverConfig: {
+                ...server,
+                bizName,
+                version: apiVersion,
+            },
             ...response.data,
         };
     }
@@ -93,9 +99,9 @@ class SwaggerService {
      */
     private handleRequestError(error: any, url: string): null {
         if (error.response) {
-            LoggerService.logError(`请求错误，状态码: ${error.response.status}，URL: ${url}`)
+            LoggerService.logError(`请求错误，状态码: ${error.response.status}，URL: ${url}`);
         } else {
-            LoggerService.logError(`请求失败，错误信息: ${error.message}，URL: ${url}`)
+            LoggerService.logError(`请求失败，错误信息: ${error.message}，URL: ${url}`);
         }
         return null;
     }

@@ -13,9 +13,10 @@ export const CONFIG_FILE_CONTENT = `
   "requiredResponseField": true,
   "servers": [{
     "url": "http://接口文档地址.com",
-    "type": "swagger",
     "name": "",
-    "dataKey": "",
+    "type": "swagger",
+    "version": "",
+    "typeNameSuffix":"",
     "auth": {
       "username": "",
       "password": ""
@@ -25,4 +26,4 @@ export const CONFIG_FILE_CONTENT = `
     "params": {}
   }]
 }
-`
+`;

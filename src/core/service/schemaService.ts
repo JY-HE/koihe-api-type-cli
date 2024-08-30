@@ -3,7 +3,7 @@ import { ProcessedSchemas, Properties, Schema } from "../types/config";
 import { cleanDescription, isReferenceObject, isPrimitiveType } from "../utils";
 
 /**
- * @description 专门处理 Schema 的解析和处理逻辑
+ * @description 处理 schemas 数据的解析
  */
 class SchemaService {
     private descReg: RegExp;
@@ -25,7 +25,7 @@ class SchemaService {
         schemas: OpenAPIV3.ComponentsObject["schemas"] = {}
     ): Promise<ProcessedSchemas> {
         try {
-            const resultSchema = this.processSchemas(schemas);
+            const resultSchema = await this.processSchemas(schemas);
             if (this.seenSchemas.size) {
                 return await this.seenSchemasHandler(resultSchema, schemas);
             }
@@ -40,14 +40,30 @@ class SchemaService {
      * @param schemas 原始的 schemas 数据
      * @returns 返回处理好的 schemas 数据对象
      */
-    private processSchemas(schemas: OpenAPIV3.ComponentsObject["schemas"] = {}): ProcessedSchemas {
-        return Object.entries(schemas).reduce((pre, [curSchemaName, curSchemaData]) => {
-            const schemaData: Schema | null = this.processSchema(pre, curSchemaName, curSchemaData);
-            return {
-                ...pre,
-                [curSchemaName]: schemaData,
-            };
-        }, {} as ProcessedSchemas);
+    private async processSchemas(
+        schemas: OpenAPIV3.ComponentsObject["schemas"] = {}
+    ): Promise<ProcessedSchemas> {
+        return new Promise((resolve, reject) => {
+            try {
+                const resultSchema = Object.entries(schemas).reduce(
+                    (pre, [curSchemaName, curSchemaData]) => {
+                        const schemaData: Schema | null = this.processSchema(
+                            pre,
+                            curSchemaName,
+                            curSchemaData
+                        );
+                        return {
+                            ...pre,
+                            [curSchemaName]: schemaData,
+                        };
+                    },
+                    {} as ProcessedSchemas
+                );
+                resolve(resultSchema);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
     /**
@@ -95,19 +111,25 @@ class SchemaService {
         processedSchemas: ProcessedSchemas,
         schemas: OpenAPIV3.ComponentsObject["schemas"] = {}
     ): Promise<ProcessedSchemas> {
-        const resultSchema = { ...processedSchemas };
-        for (const schemaName of this.seenSchemas) {
-            if (schemas[schemaName]) {
-                const updatedProperties = this.processSchemaProperties(
-                    schemaName,
-                    schemas[schemaName],
-                    processedSchemas
-                );
-                resultSchema[schemaName] = updatedProperties;
+        return new Promise((resolve, reject) => {
+            try {
+                const resultSchema = { ...processedSchemas };
+                for (const schemaName of this.seenSchemas) {
+                    if (schemas[schemaName]) {
+                        const updatedProperties = this.processSchemaProperties(
+                            schemaName,
+                            schemas[schemaName],
+                            processedSchemas
+                        );
+                        resultSchema[schemaName] = updatedProperties;
+                    }
+                }
+                this.seenSchemas.clear(); // 清除缓存的 schemas 名称
+                resolve(resultSchema);
+            } catch (error) {
+                reject(error);
             }
-        }
-        this.seenSchemas.clear(); // 清除缓存的 schemas 名称
-        return resultSchema;
+        });
     }
 
     /**
@@ -122,7 +144,7 @@ class SchemaService {
         schemaName: string,
         schemaData: OpenAPIV3.ReferenceObject,
         processedSchemas: ProcessedSchemas,
-        type: string = ''
+        type: string = ""
     ): Schema {
         const refName = schemaData.$ref?.split("/")?.pop() || "";
         const refObj = processedSchemas[refName] || null;
@@ -132,7 +154,7 @@ class SchemaService {
         this.seenSchemas.add(schemaName);
         return {
             type: type || "unknown",
-            description: ''
+            description: "",
         };
     }
 
@@ -164,15 +186,17 @@ class SchemaService {
     ): Schema {
         const { type = "", description = "", required = [] } = schemaData;
         if (type === "object") {
-            const propertiesArr = Object.entries(schemaData?.properties || {}).map(([key, value]) => {
-                return this.processSchemaProperties(
-                    key,
-                    value,
-                    processedSchemas,
-                    required,
-                    schemaName
-                );
-            });
+            const propertiesArr = Object.entries(schemaData?.properties || {}).map(
+                ([key, value]) => {
+                    return this.processSchemaProperties(
+                        key,
+                        value,
+                        processedSchemas,
+                        required,
+                        schemaName
+                    );
+                }
+            );
             return {
                 type,
                 description,
@@ -185,7 +209,7 @@ class SchemaService {
                 return this.processReferenceSchema(schemaName, items, processedSchemas, type);
             }
             return {
-                type: 'Array<any>',
+                type: "Array<any>",
                 description,
                 properties: null,
             };
@@ -230,13 +254,7 @@ class SchemaService {
             return this.handleArrayType(key, value, processedSchemas, requiredList, curSchemaName);
         }
         if (type === "object") {
-            return this.handleObjectType(
-                key,
-                value,
-                processedSchemas,
-                requiredList,
-                curSchemaName
-            );
+            return this.handleObjectType(key, value, processedSchemas, requiredList, curSchemaName);
         }
         return this.handleDefaultType(key, value, processedSchemas, requiredList, curSchemaName);
     }
@@ -257,9 +275,9 @@ class SchemaService {
         processedSchemas: ProcessedSchemas,
         requiredList: string[],
         curSchemaName: string,
-        type: string = 'any'
+        type: string = "any"
     ): Properties {
-        const refName = value.$ref.split("/").pop() || '';
+        const refName = value.$ref.split("/").pop() || "";
         const refObj = processedSchemas[refName] || null;
         if (!refObj) {
             this.seenSchemas.add(curSchemaName);
@@ -292,7 +310,6 @@ class SchemaService {
             details: details.length ? details : null,
         };
     }
-
 
     /**
      * @description 处理 properties 为基本数据类型
@@ -334,9 +351,9 @@ class SchemaService {
     ): Properties {
         const items = (value as OpenAPIV3.ArraySchemaObject).items;
         let details: Array<Properties | number | string> = [];
-        let type = ''
+        let type = "";
         if (isReferenceObject(items)) {
-            const refName = items.$ref.split("/").pop() || '';
+            const refName = items.$ref.split("/").pop() || "";
             const refObj = processedSchemas[refName] || null;
             if (!refObj) {
                 this.seenSchemas.add(curSchemaName);
@@ -354,9 +371,11 @@ class SchemaService {
                     );
                 });
             }
-            type = `Array<${details.length ? 'object' : 'any'}>`
+            type = `Array<${details.length ? "object" : "any"}>`;
         } else {
-            type = `Array<${((items?.type || 'any') === 'integer' ? 'number' : (items?.type || 'any'))}>`;
+            type = `Array<${
+                (items?.type || "any") === "integer" ? "number" : items?.type || "any"
+            }>`;
         }
         return {
             key,
@@ -409,7 +428,7 @@ class SchemaService {
                 processedSchemas,
                 requiredList,
                 curSchemaName,
-                'object'
+                "object"
             );
         }
         return {
