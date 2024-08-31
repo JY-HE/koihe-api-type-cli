@@ -188,7 +188,7 @@ class PathsService {
             }
             return {
                 type: `Array<${
-                    schema.type ? (schema.type === "integer" ? "number" : schema.type) : "any"
+                    items.type ? (items.type === "integer" ? "number" : items.type) : "any"
                 }>`,
                 details: null,
             };
