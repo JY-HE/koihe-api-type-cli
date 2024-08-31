@@ -2,5 +2,6 @@ node_modules/
 dist
 *.log
 apitConfig.json
-schema.json
-biz.json
+pathsData.json
+schemasData.json
+/src/types

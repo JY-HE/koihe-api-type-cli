@@ -5,13 +5,27 @@ import SwaggerService from "./service/swaggerService";
 import SchemaService from "./service/schemaService";
 import LoggerService from "./service/loggerService";
 import PathsService from "./service/pathsService";
-import { Config, SwaggerData } from "./types/config";
+import CreateTsFileService from "./service/createTsFileService";
+import { Config, SwaggerData, ProcessedSchemas } from "./types/config";
+import { ProcessedPath } from "./types/paths";
 
 class Service {
     private configService = new ConfigService();
     private swaggerService = new SwaggerService();
     private schemaService = new SchemaService();
     private pathsService = new PathsService();
+    private createTsFileService = new CreateTsFileService();
+    private schemaDataJson: {
+        [bizName: string]: ProcessedSchemas;
+    };
+    private pathsDataJson: {
+        [bizName: string]: ProcessedPath[];
+    };
+
+    constructor() {
+        this.schemaDataJson = {};
+        this.pathsDataJson = {};
+    }
 
     public async initConfigFile(): Promise<void> {
         await this.configService.initConfigFile();
@@ -25,24 +39,28 @@ class Service {
         return await this.swaggerService.getSwaggerData(config);
     }
 
-    public async parseSwaggerData(swaggerData: SwaggerData[]): Promise<void> {
+    public async parseSwaggerData(swaggerData: SwaggerData[], config: Config): Promise<void> {
         LoggerService.start("正在解析数据...");
-        let schemaDataJson = {};
-        let pathsDataJson = {};
         for (const swagger of swaggerData) {
             try {
                 const { components, paths, serverConfig } = swagger;
                 const schemas = components?.schemas || null;
                 if (schemas) {
                     const schemaData = await this.schemaService.schemasDataHandler(schemas);
-                    schemaDataJson = { ...schemaDataJson, [serverConfig.bizName]: schemaData };
+                    this.schemaDataJson = {
+                        ...this.schemaDataJson,
+                        [serverConfig.bizName]: schemaData,
+                    };
                     if (Object.keys(paths).length) {
                         const pathsData = await this.pathsService.pathsDataHandler(
                             paths,
                             schemaData,
                             serverConfig
                         );
-                        pathsDataJson = { ...pathsDataJson, [serverConfig.bizName]: pathsData };
+                        this.pathsDataJson = {
+                            ...this.pathsDataJson,
+                            [serverConfig.bizName]: pathsData,
+                        };
                     }
                 } else {
                     console.warn(`No schemas found for ${serverConfig.bizName}`);
@@ -52,18 +70,23 @@ class Service {
             }
         }
         LoggerService.succeed("数据解析完成");
-        // 写入 schema.json
+        // 写入 schemasData.json
         writeFileSync(
-            join(process.cwd(), "schema.json"),
-            JSON.stringify(schemaDataJson, null, "\t"),
+            join(process.cwd(), "schemasData.json"),
+            JSON.stringify(this.schemaDataJson, null, "\t"),
             "utf8"
         );
-        // 写入 biz.json
+        // 写入 pathsData.json
         writeFileSync(
-            join(process.cwd(), "biz.json"),
-            JSON.stringify(pathsDataJson, null, "\t"),
+            join(process.cwd(), "pathsData.json"),
+            JSON.stringify(this.pathsDataJson, null, "\t"),
             "utf8"
         );
+        LoggerService.start("正在写入文件...");
+        for (const key in this.pathsDataJson) {
+            await this.createTsFileService.startup(key, this.pathsDataJson[key], config);
+        }
+        LoggerService.succeed("写入文件完成");
     }
 }
 

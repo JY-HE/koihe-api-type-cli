@@ -64,7 +64,7 @@ class Cli {
             const res = await this.service.getSwaggerData(configFileContent);
             if (res.length) {
                 // 解析数据
-                await this.service.parseSwaggerData(res);
+                await this.service.parseSwaggerData(res, configFileContent);
             }
         } catch (error) {
             throw error;
