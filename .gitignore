@@ -4,4 +4,4 @@ dist
 apitConfig.json
 pathsData.json
 schemasData.json
-/src/types
+apis
