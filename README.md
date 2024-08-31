@@ -16,14 +16,14 @@ yarn add @koihe/api-type-cli -D
 - 初始化配置文件
 
 ```
-apit init
+npx apit init
 ```
 
 - 运行生成 `API` 文件
   - 打开 `apitConfig.json` 文件进行自定义配置
   - 完成配置之后，输入下面指令，即可生成 `API` 文件
 ```
-apit
+npx apit
 ```
 
 ## 配置文件说明

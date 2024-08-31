@@ -1,7 +1,7 @@
 {
     "name": "@koihe/api-type-cli",
     "version": "1.0.0",
-    "description": "用于解析Swagger文档，并自动生成API接口类型定义的工具库。",
+    "description": "一个可以根据用户自定义的配置文件，自动请求 Swagger 文档数据，并解析处理自动生成 API 接口类型定义的快捷工具库。",
     "type": "module",
     "main": "dist/index.mjs",
     "types": "dist/index.d.ts",
