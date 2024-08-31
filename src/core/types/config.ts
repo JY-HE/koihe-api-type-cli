@@ -18,7 +18,7 @@ export type Server = {
     // 自定义类型名称后缀，可以用于区分不同服务的同名api。请求类型名称默认：methodType + url + 'ReqType' + typeNameSuffix + version，响应类型名称默认：methodType + url + 'ResType' + typeNameSuffix + version
     typeNameSuffix?: string;
     // 访问文档可能需要认证信息，通过使用token访问
-    authToken?: "";
+    authToken?: string;
     // 访问接口文档时候，自定义的一些请求头
     headers?: AxiosHeaders | Record<string, any>;
     // 访问接口文档时候，自定义的一些请求参数
