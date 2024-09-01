@@ -40,7 +40,7 @@ class Service {
     }
 
     public async parseSwaggerData(swaggerData: SwaggerData[], config: Config): Promise<void> {
-        LoggerService.start("正在解析数据...");
+        LoggerService.start("正在解析数据...\n");
         for (const swagger of swaggerData) {
             try {
                 const { components, paths, serverConfig } = swagger;
@@ -82,7 +82,7 @@ class Service {
             JSON.stringify(this.pathsDataJson, null, "\t"),
             "utf8"
         );
-        LoggerService.start("正在写入文件...");
+        LoggerService.start("正在写入文件...\n");
         for (const key in this.pathsDataJson) {
             await this.createTsFileService.startup(key, this.pathsDataJson[key], config);
         }

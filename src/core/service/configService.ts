@@ -23,7 +23,7 @@ class ConfigService {
         try {
             const isCreate = await isCreateFile(this.configFilePath);
             if (!isCreate) return;
-            LoggerService.start("正在生成配置文件...");
+            LoggerService.start("正在生成配置文件...\n");
             await outputFile(this.configFilePath, CONFIG_FILE_CONTENT, "utf-8");
             LoggerService.succeed("配置文件生成成功");
         } catch (error) {

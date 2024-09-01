@@ -24,7 +24,7 @@ class SwaggerService {
             );
         });
 
-        LoggerService.start("正在请求 Swagger 文档数据...");
+        LoggerService.start("正在请求 Swagger 文档数据...\n");
 
         const results = await Promise.allSettled(requests);
 

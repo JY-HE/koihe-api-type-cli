@@ -32,10 +32,10 @@ npx apit
 {
     // API 文件生成后的输出路径，默认值：src/types。必填
     outputPath: "";
-    // 请求数据所有字段设置成必有属性，默认值: false
+    // 请求数据所有字段设置成必有属性，默认值: false，按照原始 swagger 文档数据的 required 判断
     requiredRequestField?: false;
-    // 响应数据所有字段设置成必有属性，默认值：true
-    requiredResponseField?: false;
+    // 响应数据所有字段设置成必有属性，默认值：true。如果是 false 则按照原始 swagger 文档数据的 required 判断
+    requiredResponseField?: true;
     // 接口文档服务配置，可配置多个文档服务，servers 为数组对象，必填
     servers: [
         {

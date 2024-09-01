@@ -10,7 +10,7 @@ export const CONFIG_FILE_CONTENT = `
 {
   "outputPath": "src/types", 
   "requiredRequestField": false,
-  "requiredResponseField": false,
+  "requiredResponseField": true,
   "servers": [
     {
       "url": "http://接口文档地址.com",

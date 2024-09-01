@@ -12,8 +12,7 @@ class LoggerService {
      * @param message 日志信息
      */
     public start(message: string) {
-        console.log(pc.cyan(message));
-        this.spinner.start();
+        this.spinner.start(pc.cyan(message));
     }
 
     /**
