@@ -1,12 +1,16 @@
 import { cac } from "cac";
-import { version } from "../../package.json";
+import { readFileSync } from "fs-extra";
+import { join } from "path";
 import Service from "../core";
 
 class Cli {
     private cli: ReturnType<typeof cac>;
     private service: Service;
+    private version: string;
 
     constructor() {
+        const packageJson = JSON.parse(readFileSync(join(process.cwd(), "package.json"), "utf8"));
+        this.version = packageJson.version;
         // 创建一个命令行应用程序实例，指定调用该应用程序的名称为 apit
         this.cli = cac("apit");
         this.service = new Service();
@@ -25,7 +29,7 @@ class Cli {
             .action(async (cmd) => {
                 // 自定义展示版本信息，因为 cli.version() 不是想要的效果
                 if (cmd.version || cmd.v) {
-                    console.log(`v${version}`);
+                    console.log(`v${this.version}`);
                 } else {
                     try {
                         await this.handleDefaultCommand();

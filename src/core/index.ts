@@ -70,18 +70,6 @@ class Service {
             }
         }
         LoggerService.succeed("数据解析完成");
-        // 写入 schemasData.json
-        writeFileSync(
-            join(process.cwd(), "schemasData.json"),
-            JSON.stringify(this.schemaDataJson, null, "\t"),
-            "utf8"
-        );
-        // 写入 pathsData.json
-        writeFileSync(
-            join(process.cwd(), "pathsData.json"),
-            JSON.stringify(this.pathsDataJson, null, "\t"),
-            "utf8"
-        );
         LoggerService.start("正在写入文件...\n");
         for (const key in this.pathsDataJson) {
             await this.createTsFileService.startup(key, this.pathsDataJson[key], config);
